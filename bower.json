@@ -1,0 +1,21 @@
+
+{
+  "name": "page_with-goods",
+  "description": "page_with-goods",
+  "main": "server.js",
+  "authors": [
+    "Andrey Ilyin"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
