@@ -15,8 +15,8 @@ angular.module('cleveroad')
         $scope.isLogin = false;
         $scope.userEmail = '';
         $rootScope.$on('user-registered', function (event, args) {
-            $scope.isLogin = args.isLogin;
-            $scope.userEmail = args.userEmail;
+            $scope.isLogin = args.data.isLogin;
+            $scope.userEmail = args.data.userEmail;
         });
         $rootScope.$on('user-login', function (event, args) {
             $scope.isLogin = args.data.isLogin;
@@ -35,16 +35,19 @@ angular.module('cleveroad')
     }]);
 
 angular.module('cleveroad')
-    .controller('registerCtrl', ['registerService', '$scope', '$rootScope', function (registerService, $scope, $rootScope) {
+    .controller('registerCtrl', ['registerService', '$scope', '$rootScope', '$location', 'Auth', function (registerService, $scope, $rootScope, $location, Auth) {
        $scope.userObj = {};
        $scope.doRegister = function (userObj) {
            delete userObj.password2;
            return registerService.doRegister(userObj)
                .success(function (response) {
                    $rootScope.$broadcast('user-registered', {data: {
-                       userEmail: response._id,
+                       userEmail: response.email,
                        isLogin: true
                    }});
+                   $rootScope.user = response;
+                   Auth.setIsLogin(true);
+                   $location.path('/goods');
                })
                .error(function (response) {
                    if (response && response.error) {
@@ -65,8 +68,14 @@ angular.module('cleveroad')
                         userEmail: response.email,
                         isLogin: true
                     }});
+                    $rootScope.user = response;
                     Auth.setIsLogin(true);
                     $location.path('/goods')
                 })
         }
+    }]);
+
+angular.module('cleveroad')
+    .controller('goodsCtrl', ['$scope', function ($scope) {
+
     }]);

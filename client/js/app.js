@@ -16,7 +16,7 @@ app.config(function ($routeProvider, $locationProvider) {
             template: '<register></register>'
         })
         .when('/goods', {
-            template: 'This place for goods',
+            template: '<goods></goods>',
             resolve: {
                 check: function ($q, Auth) {
                 var defer = $q.defer();

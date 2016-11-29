@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col-md-4 col-md-offset-1">
+        <button type="button" class="btn btn-danger">Add Product</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 col-md-offset-1" ng-if="!productList.length || !addProductMode">
+        <h3>No products in list</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <table class="table">
+            <th>
+                <td>#</td>
+                <td>Type</td>
+                <td>Price</td>
+                <td>About</td>
+            </th>
+        </table>
+    </div>
+
+</div>
