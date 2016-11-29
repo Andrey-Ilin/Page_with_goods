@@ -34,6 +34,28 @@ angular.module('cleveroad').factory('loginService', ['$http', function ($http) {
     }
 }]);
 
+angular.module('cleveroad').factory('goodsService', ['$http', function ($http) {
+    var getProducts = function () {
+        return $http({
+            method: 'GET',
+            url: '/api/v1/goods'
+        })
+    };
+
+    var addProduct = function (newProductDTO) {
+        return $http({
+            method: 'POST',
+            url: '/api/v1/goods',
+            data: newProductDTO
+        })
+    };
+
+    return {
+        getProducts: getProducts,
+        addProduct: addProduct
+    }
+}]);
+
 angular.module('cleveroad').factory('htmlValidationRulesMapService', function() {
 
     var patterns = {

@@ -4,6 +4,26 @@
     </div>
 </div>
 <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+        <form name="addProductForm" ng-submit="addProduct(newProduct)">
+            <div class="form-group">
+                <label for="type">Type</label>
+                <input type="text" class="form-control" id="type" placeholder="Type" ng-model="newProduct.type">
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="text" class="form-control" id="price" placeholder="Price" ng-model="newProduct.price">
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" rows="5" id="description" ng-model="newProduct.description"></textarea>
+            </div>
+            <button type="submit" class="btn btn-default">Add product</button>
+            <button type="button" class="btn btn-default" ng-click="cancelAddProduct()">Cancel</button>
+        </form>
+    </div>
+</div>
+<div class="row">
     <div class="col-md-4 col-md-offset-1" ng-if="!productList.length || !addProductMode">
         <h3>No products in list</h3>
     </div>
@@ -11,12 +31,30 @@
 <div class="row">
     <div class="col-md-10 col-md-offset-1">
         <table class="table">
-            <th>
-                <td>#</td>
-                <td>Type</td>
-                <td>Price</td>
-                <td>About</td>
-            </th>
+            <thead>
+            <tr>
+                <th></th>
+                <th>#</th>
+                <th>Type</th>
+                <th>Price</th>
+                <th>About</th>
+                <th>Edit</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="product in productList">
+                <td><input type="checkbox"></td>
+                <td>{{$index + 1}}</td>
+                <td>{{product.type}}</td>
+                <td>{{product.price}}</td>
+                <td>
+                    <button type="button" class="btn btn-primary">About</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-success">Edit</button>
+                </td>
+            </tr>
+            </tbody>
         </table>
     </div>
 

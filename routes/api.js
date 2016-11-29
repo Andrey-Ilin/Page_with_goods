@@ -2,12 +2,12 @@ var express = require('express');
 var router = express.Router();
 var mongojs = require("mongojs");
 
-var db = mongojs('mongodb://andrey:andrey@ds111788.mlab.com:11788/clearoad', ['users']);
+var db = mongojs('mongodb://andrey:andrey@ds111788.mlab.com:11788/clearoad', ['users', 'goods']);
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-
-});
+// router.get('/', function(req, res, next) {
+//
+// });
 
 router.post('/register', function(req, res, next) {
     var newUserObj = req.body;
@@ -70,4 +70,32 @@ router.get('/logout',
         });
         req.logout();
     });
+
+router.post('/goods', function(req, res, next) {
+    var newProduct = req.body;
+
+    db.goods.save(newProduct, function (err, result) {
+        if (err) {
+            res.send(err)
+        } else {
+            res.json(result)
+        }
+    })
+});
+
+router.get('/goods', function(req, res, next) {
+    
+    // res.json({
+    //     "goods": "ok"
+    // });
+    db.goods.find(function (err, docs) {
+        if (err) {
+            console.log(err)
+            res.send(err)
+        } else {
+            console.log(docs)
+            res.json(docs)
+        }
+    })
+});
 module.exports = router;

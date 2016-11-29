@@ -76,6 +76,22 @@ angular.module('cleveroad')
     }]);
 
 angular.module('cleveroad')
-    .controller('goodsCtrl', ['$scope', function ($scope) {
+    .controller('goodsCtrl', ['$scope', 'goodsService', function ($scope, goodsService) {
+        $scope.productList = [];
 
+        var getProducts = function () {
+            return goodsService.getProducts()
+                .then(function (response) {
+                    console.log(response)
+                })
+        };
+
+        getProducts();
+
+        $scope.addProduct = function (newProduct) {
+            return goodsService.addProduct(newProduct)
+                .then(function (response) {
+                    $scope.productList.push(response.data)
+                })
+        }
     }]);
