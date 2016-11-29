@@ -16,7 +16,8 @@ router.post('/register', function(req, res, next) {
         if (err) {
             res.send(err)
         } else {
-            if (user) {
+            if (user.length) {
+                console.log(user);
                 res.status(400);
                 res.json({
                     "error": "This email associated with another account"
@@ -33,9 +34,40 @@ router.post('/register', function(req, res, next) {
             }
         }
     });
-
-
 });
 
+router.post('/login',
+    function(req, res) {
+        db.users.find({email: req.body.email}, function (err, user) {
+          if (err) {
+              res.send(err);
+          }
+          if (!user.length) {
+              res.status(400);
+              res.json({
+                  "error": "Invalid email"
+              });
+              return;
+          }
+          if (user[0].password != req.body.password) {
+              res.status(400);
+              res.json({
+                  "error": "Invalid password"
+              });
+              return;
+          }
 
+          if (user[0].password == req.body.password) {
+              res.send(user[0])
+          }
+        })
+    });
+
+router.get('/logout',
+    function(req, res) {
+        res.json({
+            "message": "You are now logged out"
+        });
+        req.logout();
+    });
 module.exports = router;

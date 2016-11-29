@@ -10,6 +10,7 @@ app.directive('navbar', [function () {
 app.directive('login', [function () {
     return {
         restrict: 'E',
+        controller: 'loginCtrl',
         templateUrl: 'templates/directives/login.html',
         scope: {}
     }

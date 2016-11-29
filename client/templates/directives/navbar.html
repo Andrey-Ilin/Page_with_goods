@@ -12,12 +12,16 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li><a href="/">Home</a></li>
-                <li><a href="users/register">Register</a></li>
-                <li ng-if="isLogin"><a href="users/login">Login</a></li>
+                <li ng-if="!isLogin"><a href="users/register">Register</a></li>
+                <li ng-if="!isLogin"><a href="users/login">Login</a></li>
+                <li ng-if="isLogin"><a href="goods">Goods</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li ng-if="userEmail">{{userEmail}}</li>
-                <li ng-if="!isLogin"><a href="users/logout">Logout</a></li>
+                <li ng-if="userEmail"><a href="#">{{userEmail}}</a></li>
+                <li ng-if="isLogin">
+                    <button type="button" class="btn btn-default navbar-btn">Settings</button>
+                </li>
+                <li ng-if="isLogin" ng-click="logout()"><a href="users/logout">Logout</a></li>
             </ul>
         </div>
     </div>

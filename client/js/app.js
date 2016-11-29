@@ -9,10 +9,26 @@ app.config(function ($routeProvider, $locationProvider) {
         .when('/users/login', {
             template: '<login></login>'
         })
+        .when('/404', {
+            templateUrl: 'templates/404.html'
+        })
         .when('/users/register', {
             template: '<register></register>'
         })
-        .otherwise({ redirectTo: '/' });
+        .when('/goods', {
+            template: 'This place for goods',
+            resolve: {
+                check: function ($q, Auth) {
+                var defer = $q.defer();
+                if (Auth.getIsLogin()) {
+                    return defer.resolve;
+                } else {
+                    defer.reject('not_logged_in')
+                }
+                return defer.promise;
+            }}
+        })
+        .otherwise({ redirectTo: '/404' });
 });
 
 

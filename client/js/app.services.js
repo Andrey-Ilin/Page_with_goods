@@ -12,6 +12,28 @@ angular.module('cleveroad').factory('registerService', ['$http', function ($http
     }
 }]);
 
+angular.module('cleveroad').factory('loginService', ['$http', function ($http) {
+    var doLogin = function (userDTO) {
+        return $http({
+            method: 'POST',
+            url: '/api/v1/login',
+            data: userDTO
+        })
+    };
+
+    var doLogout = function () {
+        return $http({
+            method: 'GET',
+            url: '/api/v1/logout'
+        })
+    };
+
+    return {
+        doLogin: doLogin,
+        doLogout: doLogout
+    }
+}]);
+
 angular.module('cleveroad').factory('htmlValidationRulesMapService', function() {
 
     var patterns = {
@@ -421,6 +443,18 @@ angular.module('cleveroad').factory('htmlValidationService', ['htmlValidationRul
     };
 }]);
 
-angular.module('cleveroad').factory('Auth', ['$rootScope', function ($rootScope) {
-    return {}
+angular.module('cleveroad').factory('Auth', ['$rootScope', '$q', function ($rootScope, $q) {
+    var islogin = false;
+
+    var setIsLogin = function (value) {
+        islogin = value
+    };
+
+    var getIsLogin = function () {
+        return islogin;
+    };
+    return {
+        setIsLogin: setIsLogin,
+        getIsLogin: getIsLogin
+    }
 }]);
