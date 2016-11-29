@@ -12,13 +12,9 @@ var LocalStrategy = require('passport-local').Strategy;
 var multer = require('multer');
 var upload = multer({dest: './uploads'})
 var flash = require('connect-flash');
-var mongojs = require("mongojs");
-
-var db = mongojs('mongodb://andrey:andrey@ds111788.mlab.com:11788/clearoad', ['users']);
-
 
 var index = require('./routes/index');
-var users = require('./routes/users');
+var api = require('./routes/api');
 
 var app = express();
 
@@ -27,8 +23,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
-// uncomment after placing your favicon in /client
-//app.use(favicon(path.join(__dirname, 'client', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -74,7 +68,7 @@ app.use(function (req, res, next) {
 });
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/api/v1/', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -97,44 +91,6 @@ app.use(function(err, req, res, next) {
 app.listen(3001, function () {
     console.log("Server starting on port 3001...")
 });
-
-
-
-
-
-
-
-
-// var express = require("express");
-// var path = require("path");
-// var bodyParser = require("body-parser");
-//
-// var index = require("./routes/index");
-// var users = require("./routes/users");
-//
-// var app = express();
-//
-// //View Engine
-//
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'ejs');
-// app.engine('html', require('ejs').renderFile);
-//
-// app.use(express.static(path.join(__dirname, 'client')));
-//
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({
-//     extended: false
-// }));
-//
-// app.use('/', index);
-// app.use('/api/v1', users);
-//
-// app.listen(3001, function () {
-//     console.log("Server starting on port 3001...")
-// });
-
-
 
 
 

@@ -7,16 +7,17 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Page with goods</a>
+            <a class="navbar-brand" href="/">Page with goods</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li><a href="/">Home</a></li>
-                <li><a href="/users/register">Register</a></li>
-                <li><a href="/users/login">Login</a></li>
+                <li><a href="users/register">Register</a></li>
+                <li ng-if="isLogin"><a href="users/login">Login</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/users/logout">Logout</a></li>
+                <li ng-if="userEmail">{{userEmail}}</li>
+                <li ng-if="!isLogin"><a href="users/logout">Logout</a></li>
             </ul>
         </div>
     </div>
