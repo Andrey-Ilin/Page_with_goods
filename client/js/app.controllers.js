@@ -7,7 +7,6 @@ angular.module('cleveroad')
 
             }
         });
-
     }]);
 
 angular.module('cleveroad')
@@ -31,7 +30,43 @@ angular.module('cleveroad')
                     Auth.setIsLogin(false);
                     $location.path('/');
                 });
+        };
+
+        $scope.goToSettings = function () {
+            $location.path('/settings')
         }
+    }]);
+
+
+angular.module('cleveroad')
+    .controller('settingsCtrl',['$rootScope', '$scope', 'loginService', '$location', 'Auth', 'settingsService', function ($rootScope, $scope, loginService, $location, Auth, settingsService) {
+        $scope.user = $rootScope.user;
+        $scope.password = null;
+        $scope.password2 = null;
+
+        $scope.openChangePasswordForm = function () {
+            $scope.changePasswordMode = true;
+        };
+
+        $scope.closeChangePassportMode = function () {
+            $scope.changePasswordMode = false;
+            $scope.password = null;
+            $scope.password2 = null;
+        };
+
+        $scope.cancelChanges = function () {
+            $scope.user = {};
+            $location.path('/goods');
+        };
+
+        $scope.changeUserSettings = function (user) {
+           return settingsService.changeSettings(user, user._id)
+               .then(function (response) {
+                   $rootScope.user = response.data;
+                   $scope.user = $rootScope.user;
+               })
+        };
+
     }]);
 
 angular.module('cleveroad')
@@ -78,11 +113,65 @@ angular.module('cleveroad')
 angular.module('cleveroad')
     .controller('goodsCtrl', ['$scope', 'goodsService', function ($scope, goodsService) {
         $scope.productList = [];
+        $scope.addMode = false;
+        $scope.arrayForDelete = [];
+
+        $scope.setAddMode = function (value) {
+            $scope.addMode = value;
+        };
+
+        $scope.cancelAddProduct = function () {
+            $scope.setAddMode(false);
+            $scope.newProduct = {};
+        };
+
+        $scope.pushToArrayForDelete = function (product) {
+          if (product.deleteThis) {
+              $scope.arrayForDelete.push(product);
+          } else {
+              var index =  $scope.arrayForDelete.indexOf(product);
+              $scope.arrayForDelete.splice(index, 1);
+          }
+        };
+        
+        $scope.removeProducts = function (arrayOfProducts) {
+            arrayOfProducts.forEach(function (product) {
+                return goodsService.removeProduct(product._id)
+                    .then(function () {
+                        var index =  $scope.arrayForDelete.indexOf(product);
+                        $scope.arrayForDelete.splice(index, 1);
+                        getProducts();
+                    });
+            });
+        };
+
+        $scope.showAbout = function (product) {
+            $scope.showAboutMode = true;
+            $scope.product = product;
+        };
+
+        $scope.goToFromAbout = function () {
+            $scope.showAboutMode = false;
+            $scope.product = {};
+        };
+
+        $scope.setEditProductMode = function (product) {
+            $scope.product = {};
+            $scope.product = product;
+            $scope.editProductMode = true;
+            $scope.showAboutMode = true;
+        };
+
+        $scope.cancelEditProduct = function () {
+            $scope.product = {};
+            $scope.editProductMode = false;
+            $scope.showAboutMode = false;
+        };
 
         var getProducts = function () {
             return goodsService.getProducts()
                 .then(function (response) {
-                    console.log(response)
+                    $scope.productList = response.data;
                 })
         };
 
@@ -91,7 +180,17 @@ angular.module('cleveroad')
         $scope.addProduct = function (newProduct) {
             return goodsService.addProduct(newProduct)
                 .then(function (response) {
-                    $scope.productList.push(response.data)
+                    $scope.productList.push(response.data);
+                    $scope.setAddMode(false);;
+                })
+        };
+
+        $scope.editProduct = function (product) {
+            return goodsService.editProduct(product, product._id)
+                .then(function (response) {
+                    $scope.product = {};
+                    $scope.editProductMode = false;
+                    $scope.showAboutMode = false;
                 })
         }
     }]);

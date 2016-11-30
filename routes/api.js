@@ -4,20 +4,14 @@ var mongojs = require("mongojs");
 
 var db = mongojs('mongodb://andrey:andrey@ds111788.mlab.com:11788/clearoad', ['users', 'goods']);
 
-/* GET users listing. */
-// router.get('/', function(req, res, next) {
-//
-// });
-
 router.post('/register', function(req, res, next) {
     var newUserObj = req.body;
 
     db.users.find({email: newUserObj.email}, function (err, user) {
         if (err) {
-            res.send(err)
+            res.send(err);
         } else {
             if (user.length) {
-                console.log(user);
                 res.status(400);
                 res.json({
                     "error": "This email associated with another account"
@@ -26,9 +20,9 @@ router.post('/register', function(req, res, next) {
             } else {
                 db.users.save(newUserObj, function (err, result) {
                     if (err) {
-                        res.send(err)
+                        res.send(err);
                     } else {
-                        res.json(result)
+                        res.json(result);
                     }
                 })
             }
@@ -76,26 +70,65 @@ router.post('/goods', function(req, res, next) {
 
     db.goods.save(newProduct, function (err, result) {
         if (err) {
-            res.send(err)
+            res.send(err);
         } else {
-            res.json(result)
+            res.json(result);
         }
     })
 });
 
-router.get('/goods', function(req, res, next) {
-    
-    // res.json({
-    //     "goods": "ok"
-    // });
+router.put('/goods', function(req, res, next) { //TODO get method work wrong, maybe something with router
+
     db.goods.find(function (err, docs) {
         if (err) {
-            console.log(err)
-            res.send(err)
+            res.send(err);
         } else {
-            console.log(docs)
-            res.json(docs)
+            res.json(docs);
         }
     })
 });
+
+router.delete('/goods/:id', function(req, res, next) {
+
+    db.goods.remove({
+        _id: mongojs.ObjectId(req.params.id)
+    }, '', function (err, result) {
+        if (err) {
+            res.send(err);
+        } else {
+            res.json(result);
+        }
+    })
+});
+
+router.put('/goods/:id', function(req, res, next) {
+    var product = req.body;
+
+    db.goods.update({
+        _id: mongojs.ObjectId(req.params.id)
+    }, product, {} , function (err, result) {
+        if (err) {
+            res.send(err);
+        } else {
+            res.json(result);
+        }
+    })
+});
+
+router.put('/settings/:id', function(req, res, next) {
+    var user = req.body;
+
+    db.users.findAndModify({
+        query: {_id: mongojs.ObjectId(req.params.id)},
+        update: { $set: { email: user.email, firstName: user.firstName, lastName: user.lastName, phone: user.phone } },
+        new: true
+    }, function (err, docs) {
+        if (err) {
+            res.send(err);
+        } else {
+            res.json(docs);
+        }
+    })
+});
+
 module.exports = router;

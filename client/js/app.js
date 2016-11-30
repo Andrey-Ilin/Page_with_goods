@@ -19,14 +19,29 @@ app.config(function ($routeProvider, $locationProvider) {
             template: '<goods></goods>',
             resolve: {
                 check: function ($q, Auth) {
-                var defer = $q.defer();
-                if (Auth.getIsLogin()) {
-                    return defer.resolve;
-                } else {
-                    defer.reject('not_logged_in')
+                    var defer = $q.defer();
+                    if (Auth.getIsLogin()) {
+                        return defer.resolve;
+                    } else {
+                        defer.reject('not_logged_in')
+                    }
+                    return defer.promise;
                 }
-                return defer.promise;
-            }}
+            }
+        })
+        .when('/settings', {
+            template: '<settings></settings>',
+            resolve: {
+                check: function ($q, Auth) {
+                    var defer = $q.defer();
+                    if (Auth.getIsLogin()) {
+                        return defer.resolve;
+                    } else {
+                        defer.reject('not_logged_in')
+                    }
+                    return defer.promise;
+                }
+            }
         })
         .otherwise({ redirectTo: '/404' });
 });

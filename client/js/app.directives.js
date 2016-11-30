@@ -25,6 +25,15 @@ app.directive('register', [function () {
     }
 }]);
 
+app.directive('settings',[function () {
+    return {
+        restrict: 'E',
+        controller: 'settingsCtrl',
+        templateUrl: 'templates/directives/settings.html',
+        scope: {}
+    }
+}]);
+
 app.directive('goods',[function () {
     return {
         restrict: 'E',

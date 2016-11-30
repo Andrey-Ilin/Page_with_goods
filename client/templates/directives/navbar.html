@@ -19,7 +19,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li ng-if="userEmail"><a href="#">{{userEmail}}</a></li>
                 <li ng-if="isLogin">
-                    <button type="button" class="btn btn-default navbar-btn">Settings</button>
+                    <button type="button" class="btn btn-default navbar-btn" ng-click="goToSettings()">Settings</button>
                 </li>
                 <li ng-if="isLogin" ng-click="logout()"><a href="users/logout">Logout</a></li>
             </ul>

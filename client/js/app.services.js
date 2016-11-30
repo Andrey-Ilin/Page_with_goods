@@ -17,7 +17,12 @@ angular.module('cleveroad').factory('loginService', ['$http', function ($http) {
         return $http({
             method: 'POST',
             url: '/api/v1/login',
-            data: userDTO
+            data: userDTO,
+            transformResponse: function (data, headers) {
+                var user = JSON.parse(data);
+                delete user.password;
+                return user;
+            }
         })
     };
 
@@ -34,13 +39,56 @@ angular.module('cleveroad').factory('loginService', ['$http', function ($http) {
     }
 }]);
 
+angular.module('cleveroad').factory('settingsService', ['$http', function ($http) {
+    var changeSettings = function (userDTO, id) {
+        return $http({
+            method: 'PUT',
+            url: '/api/v1/settings/' + id,
+            data: userDTO,
+            transformRequest: function (user) {
+                delete user._id;
+                var userDTO = JSON.stringify(user);
+                return userDTO;
+            },
+            transformResponse: function (data, headers) {
+                var user = JSON.parse(data);
+                delete user.password;
+                return user;
+            }
+        })
+    };
+
+
+
+    return {
+        changeSettings: changeSettings,
+
+    }
+}]);
+
 angular.module('cleveroad').factory('goodsService', ['$http', function ($http) {
     var getProducts = function () {
         return $http({
-            method: 'GET',
-            url: '/api/v1/goods'
+            method: 'PUT',     //TODO get method work wrong, maybe something with router
+            url: '/api/v1/goods',
+            transformResponse: function (data, headers) {
+                var products = JSON.parse(data);
+                products.forEach(function (product) {
+                    product.deleteThis = false
+                });
+                return products;
+            }
         })
     };
+
+    var removeProduct = function (id) {
+        return $http({
+            method: 'DELETE',
+            url: '/api/v1/goods/' + id
+        })
+    };
+
+
 
     var addProduct = function (newProductDTO) {
         return $http({
@@ -50,9 +98,25 @@ angular.module('cleveroad').factory('goodsService', ['$http', function ($http) {
         })
     };
 
+    var editProduct = function (product, id) {
+        return $http({
+            method: 'PUT',
+            url: '/api/v1/goods/' + id,
+            data: product,
+            transformRequest: function (product) {
+                delete product.deleteThis;
+                delete product._id;
+                var productDTO = JSON.stringify(product);
+                return productDTO;
+            }
+        })
+    };
+
     return {
         getProducts: getProducts,
-        addProduct: addProduct
+        addProduct: addProduct,
+        removeProduct: removeProduct,
+        editProduct: editProduct
     }
 }]);
 
