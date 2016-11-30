@@ -5,6 +5,15 @@
     <div class="col-md-1" ng-if="!addMode" ng-show="!showAboutMode">
         <button type="button" class="btn btn-danger" ng-disabled="!arrayForDelete.length" ng-click="removeProducts(arrayForDelete)">Delete</button>
     </div>
+    <div class="col-md-3 pull-right"  ng-if="!addMode" ng-show="!showAboutMode">
+        <div class="btn-group" role="group" aria-label="...">
+            <button type="button" class="btn btn-default" ng-click="goToPrevious()"><<<</button>
+            <button type="button" class="btn btn-default" ng-click="setQuantityItemsInList(steps.ten)">10</button>
+            <button type="button" class="btn btn-default" ng-click="setQuantityItemsInList(steps.twenty)">20</button>
+            <button type="button" class="btn btn-default" ng-click="setQuantityItemsInList(steps.fifty)">50</button>
+            <button type="button" class="btn btn-default" ng-click="goToNext()">>>></button>
+        </div>
+    </div>
 </div>
 <div class="row" ng-if="addMode">
     <div class="col-md-4 col-md-offset-4">
@@ -80,7 +89,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="product in productList track by $index">
+            <tr ng-repeat="product in productList track by $index" ng-if="setPaginatorRange($index)">
                 <td class="col-md-1"><input
                         type="checkbox"
                         ng-model="product.deleteThis"

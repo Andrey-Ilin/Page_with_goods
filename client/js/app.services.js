@@ -58,10 +58,24 @@ angular.module('cleveroad').factory('settingsService', ['$http', function ($http
         })
     };
 
+    var changePassword = function (password, id) {
+        return $http({
+            method: 'PUT',
+            url: '/api/v1/settings/password/' + id,
+            data: password,
+            transformResponse: function (data, headers) {
+                var user = JSON.parse(data);
+                delete user.password;
+                return user;
+            }
+        })
+    };
+
 
 
     return {
         changeSettings: changeSettings,
+        changePassword: changePassword
 
     }
 }]);

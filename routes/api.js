@@ -131,4 +131,20 @@ router.put('/settings/:id', function(req, res, next) {
     })
 });
 
+router.put('/settings/password/:id', function(req, res, next) {
+    var pass = req.body;
+
+    db.users.findAndModify({
+        query: {_id: mongojs.ObjectId(req.params.id)},
+        update: { $set: { password: pass.password } },
+        new: true
+    }, function (err, docs) {
+        if (err) {
+            res.send(err);
+        } else {
+            res.json(docs);
+        }
+    })
+});
+
 module.exports = router;

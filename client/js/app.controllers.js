@@ -21,6 +21,10 @@ angular.module('cleveroad')
             $scope.isLogin = args.data.isLogin;
             $scope.userEmail = args.data.userEmail;
         });
+        $rootScope.$on('user-up-to-date', function (event, args) {
+            $scope.userEmail = args.data.userEmail;
+        });
+
 
         $scope.logout = function () {
             return loginService.doLogout()
@@ -41,8 +45,7 @@ angular.module('cleveroad')
 angular.module('cleveroad')
     .controller('settingsCtrl',['$rootScope', '$scope', 'loginService', '$location', 'Auth', 'settingsService', function ($rootScope, $scope, loginService, $location, Auth, settingsService) {
         $scope.user = $rootScope.user;
-        $scope.password = null;
-        $scope.password2 = null;
+        $scope.password = {};
 
         $scope.openChangePasswordForm = function () {
             $scope.changePasswordMode = true;
@@ -50,12 +53,12 @@ angular.module('cleveroad')
 
         $scope.closeChangePassportMode = function () {
             $scope.changePasswordMode = false;
-            $scope.password = null;
-            $scope.password2 = null;
+            $scope.password = {};
         };
 
         $scope.cancelChanges = function () {
             $scope.user = {};
+            $scope.password = {};
             $location.path('/goods');
         };
 
@@ -64,8 +67,21 @@ angular.module('cleveroad')
                .then(function (response) {
                    $rootScope.user = response.data;
                    $scope.user = $rootScope.user;
+                   $rootScope.$broadcast('user-up-to-date', {data: {
+                       userEmail: $scope.user.email
+                   }});
+                   $location.path('/goods');
                })
         };
+
+        $scope.changePassword = function (pass, id) {
+            return settingsService.changePassword(pass, id)
+                .then(function (response) {
+                    $rootScope.user = response.data;
+                    $scope.user = $rootScope.user;
+                    $location.path('/goods');
+                })
+        }
 
     }]);
 
@@ -115,6 +131,14 @@ angular.module('cleveroad')
         $scope.productList = [];
         $scope.addMode = false;
         $scope.arrayForDelete = [];
+        $scope.startPagination = 0;
+        $scope.finishPagination = 9;
+        $scope.steps = {
+            ten: 10,
+            twenty: 20,
+            fifty: 50
+        };
+        $scope.step = $scope.steps.ten;
 
         $scope.setAddMode = function (value) {
             $scope.addMode = value;
@@ -192,5 +216,32 @@ angular.module('cleveroad')
                     $scope.editProductMode = false;
                     $scope.showAboutMode = false;
                 })
-        }
+        };
+
+        $scope.setQuantityItemsInList = function (value) {
+            $scope.startPagination = 0;
+            $scope.finishPagination = value - 1;
+            $scope.step = value;
+        };
+
+        $scope.setPaginatorRange = function (index) {
+            return ($scope.startPagination <= index) && (index <= $scope.finishPagination)
+        };
+
+        $scope.goToNext = function () {
+            if ($scope.startPagination + $scope.step >= $scope.productList.length) {
+                return;
+            }
+            $scope.startPagination = $scope.startPagination + $scope.step;
+            $scope.finishPagination = $scope.finishPagination + $scope.step;
+        };
+
+        $scope.goToPrevious = function () {
+            if ($scope.startPagination == 0) {
+                return;
+            }
+            $scope.startPagination = $scope.startPagination - $scope.step;
+            $scope.finishPagination = $scope.finishPagination - $scope.step;
+        };
+
     }]);
