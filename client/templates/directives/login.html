@@ -1,16 +1,28 @@
+<div class="row" ng-if="error">
+  <div class="col-md-6 col-md-offset-2">
+    <div class="alert alert-danger">
+      <p>{{error}}</p>
+    </div>
+  </div>
+</div>
+
 <div class="row">
   <div class="col-md-6 col-md-offset-2">
-    <form class="form-horizontal" ng-submit="doLogin(credentials)">
+    <form class="form-horizontal" ng-submit="doLogin(credentials)" name="loginForm" novalidate>
       <div class="form-group">
         <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
-        <div class="col-sm-10">
-          <input type="email" class="form-control" id="inputEmail3" placeholder="Email" ng-model="credentials.email">
+        <div class="col-sm-10" ng-class="{ 'has-error' : loginForm.email.$invalid && !loginForm.email.$pristine }">
+          <input type="email" class="form-control" id="inputEmail3" placeholder="Email" ng-model="credentials.email"
+                 ng-pattern="/^([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)@([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)[\\.]([a-zA-Z]{2,9})$/" name="email" required>
+          <p ng-show="loginForm.email.$invalid && !loginForm.email.$pristine" class="help-block">Wrong email format</p>
         </div>
       </div>
       <div class="form-group">
         <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
-        <div class="col-sm-10">
-          <input type="password" class="form-control" id="inputPassword3" placeholder="Password" ng-model="credentials.password">
+        <div class="col-sm-10" ng-class="{ 'has-error' : loginForm.password.$invalid && !loginForm.password.$pristine }">
+          <input type="password" class="form-control" id="inputPassword3" placeholder="Password" ng-model="credentials.password" name="password"
+          ng-minlength="6" ng-maxlength="16" ng-pattern="/^[a-zA-Z0-9]*$/" required>
+          <p ng-show="loginForm.password.$invalid && !loginForm.password.$pristine" class="help-block">Wrong password format</p>
         </div>
       </div>
       <div class="form-group">
@@ -24,7 +36,7 @@
       </div>
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-default">Sign in</button>
+          <button type="submit" class="btn btn-default" ng-disabled="loginForm.$invalid">Sign in</button>
         </div>
       </div>
     </form>

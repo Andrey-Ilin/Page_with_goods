@@ -18,19 +18,24 @@
 <div class="row" ng-if="addMode">
     <div class="col-md-4 col-md-offset-4">
         <form name="addProductForm" ng-submit="addProduct(newProduct)">
-            <div class="form-group">
+            <div class="form-group" ng-class="{ 'has-error' : addProductForm.typeOfProduct.$invalid && !addProductForm.typeOfProduct.$pristine }">
                 <label for="type">Type</label>
-                <input type="text" class="form-control" id="type" placeholder="Type" ng-model="newProduct.type">
+                <input type="text" class="form-control" name="typeOfProduct" id="type" placeholder="Type" ng-model="newProduct.type" required
+                ng-maxlength="255">
+                <p ng-show="addProductForm.typeOfProduct.$invalid && !addProductForm.typeOfProduct.$pristine" class="help-block">Type is required</p>
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-class="{ 'has-error' : addProductForm.priceOfProduct.$invalid && !addProductForm.priceOfProduct.$pristine }">
                 <label for="price">Price</label>
-                <input type="text" class="form-control" id="price" placeholder="Price" ng-model="newProduct.price">
+                <input type="text" class="form-control" name="priceOfProduct" id="price" placeholder="Price" ng-model="newProduct.price" format="currency" required>
+                <p ng-show="addProductForm.priceOfProduct.$invalid && !addProductForm.priceOfProduct.$pristine" class="help-block">Price is required</p>
             </div>
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea class="form-control" rows="5" id="description" ng-model="newProduct.description"></textarea>
+            <div class="form-group" ng-class="{ 'has-error' : addProductForm.descriptionOfProduct.$invalid && !addProductForm.descriptionOfProduct.$pristine }">
+                <label for="addDescription">Description</label>
+                <textarea class="form-control" rows="5" id="addDescription" name="descriptionOfProduct" ng-model="newProduct.description"
+                ng-maxlength="1000"></textarea>
+                <p ng-show="addProductForm.descriptionOfProduct.$invalid && !addProductForm.descriptionOfProduct.$pristine" class="help-block">Description is required</p>
             </div>
-            <button type="submit" class="btn btn-default">Add product</button>
+            <button type="submit" class="btn btn-default" ng-disabled="addProductForm.$invalid || addProductForm.typeOfProduct.$pristine || addProductForm.priceOfProduct.$pristine || addProductForm.descriptionOfProduct.$pristine">Add product</button>
             <button type="button" class="btn btn-default" ng-click="cancelAddProduct()">Cancel</button>
         </form>
     </div>
@@ -39,20 +44,25 @@
 
 <div class="row" ng-if="editProductMode">
     <div class="col-md-4 col-md-offset-4">
-        <form name="addProductForm" ng-submit="editProduct(product)">
-            <div class="form-group">
-                <label for="type">Type</label>
-                <input type="text" class="form-control" id="type" placeholder="Type" ng-model="product.type">
+        <form name="editProductForm" ng-submit="editProduct(product)">
+            <div class="form-group" ng-class="{ 'has-error' : editProductForm.typeOfProduct.$invalid && !editProductForm.typeOfProduct.$pristine }">
+                <label for="edittype">Type</label>
+                <input type="text" class="form-control" name="typeOfProduct" id="edittype" placeholder="Type" ng-model="product.type" required
+                       ng-maxlength="255">
+                <p ng-show="editProductForm.typeOfProduct.$invalid && !editProductForm.typeOfProduct.$pristine" class="help-block">Type is required</p>
             </div>
-            <div class="form-group">
-                <label for="price">Price</label>
-                <input type="text" class="form-control" id="price" placeholder="Price" ng-model="product.price">
+            <div class="form-group" ng-class="{ 'has-error' : editProductForm.priceOfProduct.$invalid && !editProductForm.priceOfProduct.$pristine }">
+                <label for="editprice">Price</label>
+                <input type="text" class="form-control" name="priceOfProduct" id="editprice" placeholder="Price" ng-model="product.price" format="currency" required>
+                <p ng-show="editProductForm.priceOfProduct.$invalid && !editProductForm.priceOfProduct.$pristine" class="help-block">Price is required</p>
             </div>
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea class="form-control" rows="5" id="description" ng-model="product.description"></textarea>
+            <div class="form-group" ng-class="{ 'has-error' : editProductForm.descriptionOfProduct.$invalid && !editProductForm.descriptionOfProduct.$pristine }">
+                <label for="editDescription">Description</label>
+                <textarea class="form-control" rows="5" id="editDescription" name="descriptionOfProduct" ng-model="product.description"
+                          ng-maxlength="1000"></textarea>
+                <p ng-show="editProductForm.descriptionOfProduct.$invalid && !editProductForm.descriptionOfProduct.$pristine" class="help-block">Description is required</p>
             </div>
-            <button type="submit" class="btn btn-default">Edit product</button>
+            <button type="submit" class="btn btn-default" ng-disabled="editProductForm.$invalid">Edit product</button>
             <button type="button" class="btn btn-default" ng-click="cancelEditProduct()">Cancel</button>
         </form>
     </div>
@@ -96,7 +106,7 @@
                         ng-change="pushToArrayForDelete(product)"></td>
                 <td class="col-md-1">{{$index + 1}}</td>
                 <td class="col-md-2">{{product.type}}</td>
-                <td class="col-md-2">{{product.price}}</td>
+                <td class="col-md-2">{{product.price | currency}}</td>
                 <td class="col-md-3">
                     <button type="button" class="btn btn-primary" ng-click="showAbout(product)">About</button>
                 </td>

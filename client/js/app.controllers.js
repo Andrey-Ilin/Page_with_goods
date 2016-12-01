@@ -1,16 +1,15 @@
 angular.module('cleveroad')
-    .controller('AppCtrl',['Auth', '$scope', '$rootScope', '$location', function (Auth, $scope, $rootScope, $location) {
-        $rootScope.$on("$routeChangeError", function(evt,current,previous,rejection){
-            if(rejection == "not_logged_in"){
+    .controller('AppCtrl', ['Auth', '$scope', '$rootScope', '$location', function (Auth, $scope, $rootScope, $location) {
+        $rootScope.$on("$routeChangeError", function (evt, current, previous, rejection) {
+            if (rejection == "not_logged_in") {
                 $location.path('/users/login');
             } else {
 
             }
         });
-    }]);
+    }])
 
-angular.module('cleveroad')
-    .controller('navbarCtrl',['$rootScope', '$scope', 'loginService', '$location', 'Auth', function ($rootScope, $scope, loginService, $location, Auth) {
+    .controller('navbarCtrl', ['$rootScope', '$scope', 'loginService', '$location', 'Auth', function ($rootScope, $scope, loginService, $location, Auth) {
         $scope.isLogin = false;
         $scope.userEmail = '';
         $rootScope.$on('user-registered', function (event, args) {
@@ -39,11 +38,9 @@ angular.module('cleveroad')
         $scope.goToSettings = function () {
             $location.path('/settings')
         }
-    }]);
-
-
-angular.module('cleveroad')
-    .controller('settingsCtrl',['$rootScope', '$scope', 'loginService', '$location', 'Auth', 'settingsService', function ($rootScope, $scope, loginService, $location, Auth, settingsService) {
+    }])
+    
+    .controller('settingsCtrl', ['$rootScope', '$scope', 'loginService', '$location', 'Auth', 'settingsService', function ($rootScope, $scope, loginService, $location, Auth, settingsService) {
         $scope.user = $rootScope.user;
         $scope.password = {};
 
@@ -63,15 +60,17 @@ angular.module('cleveroad')
         };
 
         $scope.changeUserSettings = function (user) {
-           return settingsService.changeSettings(user, user._id)
-               .then(function (response) {
-                   $rootScope.user = response.data;
-                   $scope.user = $rootScope.user;
-                   $rootScope.$broadcast('user-up-to-date', {data: {
-                       userEmail: $scope.user.email
-                   }});
-                   $location.path('/goods');
-               })
+            return settingsService.changeSettings(user, user._id)
+                .then(function (response) {
+                    $rootScope.user = response.data;
+                    $scope.user = $rootScope.user;
+                    $rootScope.$broadcast('user-up-to-date', {
+                        data: {
+                            userEmail: $scope.user.email
+                        }
+                    });
+                    $location.path('/goods');
+                })
         };
 
         $scope.changePassword = function (pass, id) {
@@ -83,50 +82,55 @@ angular.module('cleveroad')
                 })
         }
 
-    }]);
-
-angular.module('cleveroad')
+    }])
+    
     .controller('registerCtrl', ['registerService', '$scope', '$rootScope', '$location', 'Auth', function (registerService, $scope, $rootScope, $location, Auth) {
-       $scope.userObj = {};
-       $scope.doRegister = function (userObj) {
-           delete userObj.password2;
-           return registerService.doRegister(userObj)
-               .success(function (response) {
-                   $rootScope.$broadcast('user-registered', {data: {
-                       userEmail: response.email,
-                       isLogin: true
-                   }});
-                   $rootScope.user = response;
-                   Auth.setIsLogin(true);
-                   $location.path('/goods');
-               })
-               .error(function (response) {
-                   if (response && response.error) {
-                       $scope.error = response.error;
-                   }
-               })
-       }
-    }]);
-
-angular.module('cleveroad')
+        $scope.userObj = {};
+        $scope.doRegister = function (userObj) {
+            delete userObj.password2;
+            return registerService.doRegister(userObj)
+                .success(function (response) {
+                    $rootScope.$broadcast('user-registered', {
+                        data: {
+                            userEmail: response.email,
+                            isLogin: true
+                        }
+                    });
+                    $rootScope.user = response;
+                    Auth.setIsLogin(true);
+                    $location.path('/goods');
+                })
+                .error(function (response) {
+                    if (response && response.error) {
+                        $scope.error = response.error;
+                    }
+                })
+        }
+    }])
+    
     .controller('loginCtrl', ['loginService', '$scope', '$rootScope', '$location', 'Auth', function (loginService, $scope, $rootScope, $location, Auth) {
         $scope.credentials = {};
         $scope.credentials.rememberMe = false;
         $scope.doLogin = function (credentialsObj) {
             return loginService.doLogin(credentialsObj)
                 .success(function (response) {
-                    $rootScope.$broadcast('user-login', {data: {
-                        userEmail: response.email,
-                        isLogin: true
-                    }});
+                    $rootScope.$broadcast('user-login', {
+                        data: {
+                            userEmail: response.email,
+                            isLogin: true
+                        }
+                    });
                     $rootScope.user = response;
                     Auth.setIsLogin(true);
                     $location.path('/goods')
                 })
+                .error(function (err) {
+                    $scope.error = err.error;
+                    console.log(err)
+                })
         }
-    }]);
-
-angular.module('cleveroad')
+    }])
+    
     .controller('goodsCtrl', ['$scope', 'goodsService', function ($scope, goodsService) {
         $scope.productList = [];
         $scope.addMode = false;
@@ -150,19 +154,19 @@ angular.module('cleveroad')
         };
 
         $scope.pushToArrayForDelete = function (product) {
-          if (product.deleteThis) {
-              $scope.arrayForDelete.push(product);
-          } else {
-              var index =  $scope.arrayForDelete.indexOf(product);
-              $scope.arrayForDelete.splice(index, 1);
-          }
+            if (product.deleteThis) {
+                $scope.arrayForDelete.push(product);
+            } else {
+                var index = $scope.arrayForDelete.indexOf(product);
+                $scope.arrayForDelete.splice(index, 1);
+            }
         };
-        
+
         $scope.removeProducts = function (arrayOfProducts) {
             arrayOfProducts.forEach(function (product) {
                 return goodsService.removeProduct(product._id)
                     .then(function () {
-                        var index =  $scope.arrayForDelete.indexOf(product);
+                        var index = $scope.arrayForDelete.indexOf(product);
                         $scope.arrayForDelete.splice(index, 1);
                         getProducts();
                     });
@@ -205,7 +209,7 @@ angular.module('cleveroad')
             return goodsService.addProduct(newProduct)
                 .then(function (response) {
                     $scope.productList.push(response.data);
-                    $scope.setAddMode(false);;
+                    $scope.setAddMode(false);
                 })
         };
 
@@ -213,6 +217,7 @@ angular.module('cleveroad')
             return goodsService.editProduct(product, product._id)
                 .then(function (response) {
                     $scope.product = {};
+                    getProducts();
                     $scope.editProductMode = false;
                     $scope.showAboutMode = false;
                 })

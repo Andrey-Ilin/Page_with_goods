@@ -1,48 +1,56 @@
 <div class="row">
   <div class="col-md-6 col-md-offset-2">
     <div class="well" ng-if="error">{{error}}</div>
-    <form class="form-horizontal" ng-submit="doRegister(userObj)">
-      <div class="form-group">
+    <form class="form-horizontal" ng-submit="doRegister(userObj)" name="registerForm">
+      <div class="form-group" ng-class="{ 'has-error' : registerForm.firstName.$invalid && !registerForm.firstName.$pristine }">
         <label for="firstName" class="col-sm-2 control-label">First Name</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="firstName" placeholder="First Name" ng-model="userObj.firstName">
+          <input type="text" class="form-control" id="firstName" placeholder="First Name" ng-model="userObj.firstName" name="firstName">
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group" ng-class="{ 'has-error' : registerForm.lastName.$invalid && !registerForm.lastName.$pristine }">
         <label for="lastName" class="col-sm-2 control-label">Second name</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="lastName" placeholder="Second name" ng-model="userObj.lastName">
+          <input type="text" class="form-control" id="lastName" placeholder="Second name" ng-model="userObj.lastName" name="lastName">
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group" ng-class="{ 'has-error' : registerForm.email.$invalid && !registerForm.email.$pristine }">
          <label for="email" class="col-sm-2 control-label">Email</label>
          <div class="col-sm-10">
-           <input type="email" class="form-control" id="email" placeholder="Email" ng-model="userObj.email">
+           <input type="email" class="form-control" id="email" placeholder="Email" ng-model="userObj.email" name="email" required
+           ng-pattern="/^([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)@([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)[\\.]([a-zA-Z]{2,9})$/">
+           <p ng-show="registerForm.email.$invalid && !registerForm.email.$pristine" class="help-block">Wrong email format</p>
          </div>
       </div>
-      <div class="form-group">
+      <div class="form-group" ng-class="{ 'has-error' : registerForm.phone.$invalid && !registerForm.phone.$pristine }">
          <label for="phone" class="col-sm-2 control-label">Phone</label>
          <div class="col-sm-10">
-            <input type="text" class="form-control" id="phone" placeholder="Phone" ng-model="userObj.phone">
+            <input type="text" class="form-control" id="phone" placeholder="Phone" ng-model="userObj.phone" name="phone">
          </div>
       </div>
-      <div class="form-group">
+      <div class="form-group" ng-class="{ 'has-error' : registerForm.password.$invalid && !registerForm.password.$pristine }">
         <label for="password" class="col-sm-2 control-label">Password</label>
           <div class="col-sm-10">
-             <input type="password" class="form-control" id="password" placeholder="Password" ng-model="userObj.password">
+             <input type="password" class="form-control" id="password" placeholder="Password" ng-model="userObj.password" name="password"
+             required equals="{{password.password2}}" ng-minlength="6" ng-maxlength="16" ng-pattern="/^[a-zA-Z0-9]*$/">
+             <p ng-show="registerForm.password.$invalid && !registerForm.password.$pristine" class="help-block">Wrong format!</p>
            </div>
       </div>
-      <div class="form-group">
+      <div class="form-group" ng-class="{ 'has-error' : registerForm.password2.$invalid && !registerForm.password2.$pristine }">
         <label for="password2" class="col-sm-2 control-label">Confirm password</label>
         <div class="col-sm-10">
-          <input type="password" class="form-control" id="password2" placeholder="Confirm password" ng-model="userObj.password2">
+          <input type="password" class="form-control" id="password2" placeholder="Confirm password" ng-model="userObj.password2" required equals="{{password.password}}"
+          name="password2" ng-minlength="6" ng-maxlength="16" ng-pattern="/^[a-zA-Z0-9]*$/">
+          <p ng-show="registerForm.password2.$invalid && !registerForm.password2.$pristine" class="help-block">Not equal!</p>
         </div>
       </div>
 
 
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-default">Register</button>
+          <button type="submit" class="btn btn-default"
+          ng-disabled="registerForm.password.$invalid||
+          registerForm.password2.$invalid || registerForm.password.$pristine || registerForm.email.$invalid">Register</button>
         </div>
       </div>
     </form>
