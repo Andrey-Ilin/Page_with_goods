@@ -132,7 +132,7 @@ module.exports = function(config) {
 //
 //             'templates/directives/*.html',
 //             'templates/*.html',
-//             'tests/directives.spec.js'
+//             'tests/controllers.spec.js'
 //         ],
 //         frameworks: [ 'jasmine' ],
 //        // plugins: [ 'karma-jasmine', 'karma-chrome-launcher', 'karma-phantomjs-launcher' ],
