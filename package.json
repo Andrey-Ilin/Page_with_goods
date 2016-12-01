@@ -18,13 +18,14 @@
     "debug": "~2.2.0",
     "express-messages": "*",
     "express-session": "^1.14.2",
-    "express-validator": "*",
     "morgan": "~1.7.0",
-    "multer": "*",
-    "passport": "*",
-    "passport-http": "*",
-    "passport-local": "*",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "karma": "~0.12.1",
+    "karma-chrome-launcher": "~0.1.2",
+    "karma-jasmine": "~0.1.5",
+    "karma-phantomjs-launcher": "~0.1.2",
+    "jasmine-core": "~2.4.1",
+    "karma-ng-html2js-preprocessor": "~0.1.2"
   }
 }
 

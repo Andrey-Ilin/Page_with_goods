@@ -75,4 +75,16 @@ angular.module('cleveroad')
                 };
             }
         }
+    })
+
+    .directive("ehSimple", function () {
+        return function (scope, element) {
+            element.addClass("plain");
+        }
+    })
+    .directive('firstDirective', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'templates/first.html'
+        }
     });
