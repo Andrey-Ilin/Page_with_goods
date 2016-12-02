@@ -103,7 +103,6 @@ router.delete('/goods/:id', function(req, res, next) {
 
 router.put('/goods/:id', function(req, res, next) {
     var product = req.body;
-    console.log(product)
 
     db.goods.update({
         _id: mongojs.ObjectId(req.params.id)
