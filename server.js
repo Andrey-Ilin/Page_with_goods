@@ -6,10 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
-
-
-
-
 var index = require('./routes/index');
 var api = require('./routes/api');
 
@@ -62,8 +58,8 @@ app.use(function(err, req, res, next) {
   // res.render('error');
 });
 
-app.listen(3001, function () {
-    console.log("Server starting on port 3001...")
+app.listen(3000, function () {
+    console.log("Server starting on port 3000...")
 });
 
 
