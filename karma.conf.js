@@ -30,6 +30,8 @@ module.exports = function(config) {
             //directive templates
 
             'client/templates/*.html',
+
+            //specs
             'client/tests/*.js'
 
         ],
@@ -73,7 +75,7 @@ module.exports = function(config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['Chrome'],
+        browsers: ['Chrome', 'Chromium'],
 
 
         // Continuous Integration mode
@@ -83,7 +85,7 @@ module.exports = function(config) {
         captureTimeout: 5000,
         ngHtml2JsPreprocessor: {
             // strip this from the file path
-            stripPrefix: 'src/', // HERE
+            stripPrefix: 'clients/', // HERE
             moduleName: 'test.templates'
         }
     });
